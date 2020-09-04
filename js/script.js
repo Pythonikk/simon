@@ -12,6 +12,7 @@ const dropdown = document.querySelector('#drop-down');
 const msgPanel = document.querySelector('.msg-panel>p');
 
 
+const playingTxt = '🄿 🄻 🄰 🅈 🄸 🄽 🄶'; //This can be a const since it is being used in more than one place
 const patternLength = 15;
 let clickNum = 0;
 let pattern = createPattern();
@@ -22,7 +23,7 @@ let trigger = null;
 
 
 startBtn.addEventListener('click', () => {
-	msgPanel.textContent = '🄿 🄻 🄰 🅈 🄸 🄽 🄶';
+	msgPanel.textContent = playingTxt;
 	if (startPat !== null) {
 		restartGame();
 	};
@@ -49,23 +50,8 @@ greenBtn.addEventListener('click', () => {
 	usrClick('green');
 });
 
-dropdown.onchange = function () {
-	switch (dropdown.selectedIndex) {
-		case 0:
-		difficulty = 0;
-		break;
-
-		case 1:
-		difficulty = 1;
-		break;
-
-		case 2:
-		difficulty = 2;
-		break;
-
-		case 3:
-		difficulty = 3;
-	};
+dropdown.onchange = function () { //Entire switch can be removed, since the index always matches the difficulty
+	difficulty = dropdown.selectedIndex;
 };
 
 
@@ -79,11 +65,15 @@ function untriggerBtn(button) {
 	button.classList.remove('flash');
 };
 
+function getRandomInt(multiplier) { //This can be a function to reduce redundancy and improve readability
+	return Math.floor(Math.random() * multiplier);
+};
+
 function getRandomValues() {
 	let int = 0;
 	let array = [];
 	for (i = 0; i < patternLength; i++) {
-		int = Math.floor(Math.random() * 10);
+		int = getRandomInt(10);
 		array.push(int);
 	};
 	return array;
@@ -95,7 +85,7 @@ function createPattern() {
 
 	function gamble() {
 		let array = ['yellow', 'blue', 'red', 'green'];
-		let item = array[Math.floor(Math.random() * array.length)];
+		let item = array[getRandomInt(array.length)];
 		return item;
 	};
 
@@ -125,19 +115,28 @@ function createPattern() {
 	return patArray;
 };
 
+function getInvervalSpeedByDifficulty(difficulty) { //Breaking new switch() into its own descriptive function also removes the need for the original code comment
+	switch(difficulty) {
+		case 0:
+		return 1000;
+
+		default:
+		case 1: //Declaring case 1 instead of just letting it fall into default provides clarity of what normal speed is, should the default ever need to change
+		return 800;
+
+		case 2:
+		return 600;
+
+		case 3:
+		return 400;
+	};
+};
+
 function displayPattern(patLength, difficulty, trigger) {	
 	let patternIndex = 0;
 	
-	// set interval speed for various difficulties:
-	if (difficulty == 0) {
-		trigger = setInterval(loopPattern, 1000, patLength);
-	} else if (difficulty == 2) {
-		trigger = setInterval(loopPattern, 600, patLength);
-	} else if (difficulty == 3) {
-		trigger = setInterval(loopPattern, 400, patLength);
-	} else {
-		trigger = setInterval(loopPattern, 800, patLength);
-	};
+	let intervalSpeed = getInvervalSpeedByDifficulty(difficulty)
+	trigger = setInterval(loopPattern, intervalSpeed, patLength);
 	
 	function loopPattern(patLength) {
 		switch (pattern[patternIndex]) {
@@ -166,27 +165,52 @@ function displayPattern(patLength, difficulty, trigger) {
 };
 
 function playRoundComp(round, difficulty) {
-
 	function setStartPat() {
-		if (round == 1) {
-			if (difficulty == 0 || difficulty == 1) {
+		if (round == 1) { //This refactoring is a way to cover all difficulties more simply, and provides a default for startPat by just using 'else'
+			if (difficulty <= 1) { 
 				startPat = 4;
-			} else if (difficulty == 2 || difficulty == 3) {
+			} else {
 				startPat = 5;
 			};
+			
+			/*
+				Now, just for fun, if our above statement now looks like this:
+				
+					if (difficulty <= 1) {
+						startPat = 4;
+					} else {
+						startPat = 5;
+					};
+				
+				we can set startPat in just one spot by delivering the value as a function:
+				
+					startPat = function() {
+						if (difficulty <= 1) {
+							return 4;
+						} else {
+							return 5;
+						};
+					};
+				
+				which can then be short-handed even further as such:
+
+					startPat = difficulty <= 1 ? 4 : 5;
+				
+				Effectively turning 5 or more lines into 1 line =) So it basically now reads like this:
+
+					startPat = difficulty <= 1    "if (difficulty <= 1)"
+							? 4           "{ return 4; }"
+							: 5;          "else { return 5; }"
+				
+				The "happy path" value follows the question mark, and the "unhappy path" value follows the colon.
+			*/
 		} else {
+			displayPattern(startPat, difficulty);  //Can be simplified with caution, as this does change functionality when difficulty > 3 (tho not a current scenario)
+			
 			if (difficulty == 0) {
-				displayPattern(startPat, 0);
 				startPat += 1;
-			} else if (difficulty == 1) {
-				displayPattern(startPat, 1)
-				startPat += 1;
-			} else if (difficulty == 2) {
-				displayPattern(startPat, 2);
-				startPat += 2;
 			} else {
-				displayPattern(startPat, 3);
-				startPat += 3;
+				startPat += difficulty; //Can be simplified with caution, as this does change functionality when difficulty > 3 (tho not a current scenario)
 			};
 		};
 		return startPat;
@@ -196,16 +220,8 @@ function playRoundComp(round, difficulty) {
 			console.error('You must start with round one');
 			return;
 		};
-
-	if (difficulty == 0) {
-		displayPattern(setStartPat(), 0);
-	} else if (difficulty == 1) {
-		displayPattern(setStartPat(), 1)
-	} else if (difficulty == 2) {
-		displayPattern(setStartPat(), 2);
-	} else {
-		displayPattern(setStartPat(), 3);
-	};
+	
+	displayPattern(setStartPat(), difficulty); //Can be simplified with caution, as this does change functionality when difficulty > 3 (tho not a current scenario)
 };
 
 function usrClick (buttonColor) {
@@ -217,7 +233,7 @@ function usrClick (buttonColor) {
 		playRoundComp(round, difficulty);
 	};
 
-	msgPanel.textContent = '🄿 🄻 🄰 🅈 🄸 🄽 🄶';
+	msgPanel.textContent = playingTxt;
 
 	if (clickNum <= startPat) {
 		if (buttonColor == pattern[clickNum]) {
