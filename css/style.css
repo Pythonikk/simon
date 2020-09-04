@@ -1,0 +1,108 @@
+body {
+	background-color: lightgrey;
+	font-family: 'Source Code Pro', monospace;
+	font-weight: 400;
+}
+
+h2 {
+	font-size: 72px;
+	text-align: center;
+}
+
+.options-container {
+	height: 120px;
+	text-align: center;
+	position: relative;
+	bottom: 35px;
+}
+
+.drop-down {
+	display: inline-block;
+	position: relative;
+	bottom: 15px;
+	padding: 5px;
+}
+
+select {
+	font: inherit;
+}
+
+option {
+	font: inherit;
+}
+
+#start-btn {
+	display: inline-block;
+	height: 70px;
+	width: 135px;
+	font-size: 20px;
+	margin-top: 10px;
+	font: inherit;
+	margin-bottom: 30px;
+}
+
+.msg-panel {
+	background-color: #fafafa;
+	border: 1px solid black;
+	border-style: inset;
+	border-radius: 4px;
+	height: 55px;
+	width: 48%;
+	margin: auto;
+	font-size: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.btn-container {
+	height: 500px;
+	padding: 20px;
+}
+
+.top-btns {
+	text-align: center;
+	padding: 5px;
+	margin-top: 50px;	
+}
+
+.bottom-btns {
+	text-align: center;
+	padding: 5px;
+}
+
+.green {
+	background-color: green;
+	width: 25%;
+	height: 140px;
+	opacity: 90%;
+	display: inline;
+}
+
+.red {
+	background-color: red;
+	width: 25%;
+	height: 140px;
+	opacity: 90%;
+	display: inline;
+}
+
+.yellow {
+	background-color: yellow;
+	width: 25%;
+	height: 140px;
+	opacity: 90%;
+	display: inline;
+}
+
+.blue {
+	background-color: blue;
+	width: 25%;
+	height: 140px;
+	opacity: 90%;
+	display: inline;
+}
+
+.flash {
+	opacity: 25%;
+}

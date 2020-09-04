@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html> 
+
+<head> 
+	<meta charset="UTF-8">
+	<link href="./css/style.css" type="text/css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;400&display=swap" rel="stylesheet"> 
+	<audio id="incorrect">
+		<source src="./audio/incorrect.mp3" type="audio/mpeg">
+	</audio>
+	<script src="https://tonejs.github.io/build/Tone.js"></script> 
+	<title>Simon</title>
+</head>
+
+<body>
+	<h2>Simon</h2>
+	<div class="options-container">
+		<div class="drop-down">
+			<label for="difficulty">Difficulty</label>
+			<select name="drop-down" id="drop-down">
+				<option value="easy">Easy</option>
+				<option value="normal" selected>Normal</option>
+				<option value="hard">Hard</option>
+				<option value="wizard">Wizard</option>
+			</select>
+		</div>
+		<div class="start-container">
+			<button type="button" id="start-btn" name="Start Game">Start / Restart</button>
+		</div>
+		<div class="msg-panel">
+			<p>Welcome! Click Start to play!</p>
+		</div>
+	</div>
+	<div class="btn-container">
+		<div class="top-btns">
+			<button type="button" id="green" class="green"></button>
+			<button type="button" id="red" class="red"></button>
+		</div>
+		<div class="bottom-btns">
+			<button type="button" id="yellow" class="yellow"></button>
+			<button type="button" id="blue" class="blue"></button>
+		</div>
+	</div>
+	<script type="text/javascript" src="./js/script.js"></script>
+</body>
+
+</html>
